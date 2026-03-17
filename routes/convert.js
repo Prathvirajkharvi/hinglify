@@ -27,12 +27,20 @@ router.post("/", upload.single("file"), async (req, res) => {
 
     // 🔥 Convert each line
     for (let entry of entries) {
-      try {
-        entry.text = await convertText(apiType, apiKey, entry.text);
-      } catch (err) {
-        console.error("Convert error:", err.message);
-      }
-    }
+
+  console.log("ORIGINAL:", entry.text); // 👈 ADD
+
+  try {
+    const result = await convertText(apiType, apiKey, entry.text);
+
+    console.log("CONVERTED:", result); // 👈 ADD
+
+    entry.text = result;
+
+  } catch (err) {
+    console.error("Convert error:", err.message);
+  }
+}
 
     // 🔥 Rebuild SRT
     const newSRT = buildSRT(entries);
