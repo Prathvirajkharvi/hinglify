@@ -27,25 +27,21 @@ router.post("/", upload.single("file"), async (req, res) => {
 
     // 🔥 Convert each line
     for (let entry of entries) {
+      try {
+        console.log("ORIGINAL:", entry.text);
 
-  console.log("ORIGINAL:", entry.text); // 👈 ADD
+        const result = await convertText(apiType, apiKey, entry.text);
 
-  try {
-    const result = await convertText(apiType, apiKey, entry.text);
+        console.log("CONVERTED:", result);
 
-    console.log("CONVERTED:", result); // 👈 ADD
+        entry.text = result;
+      } catch (err) {
+        console.error("Convert error:", err.message);
+      }
+    }
 
-    entry.text = result;
-
-  } catch (err) {
-    console.error("Convert error:", err.message);
-  }
-}
-
-    // 🔥 Rebuild SRT
     const newSRT = buildSRT(entries);
 
-    // 🔥 Send file
     res.setHeader("Content-Disposition", "attachment; filename=hinglish.srt");
     res.setHeader("Content-Type", "text/plain");
 
