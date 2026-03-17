@@ -19,14 +19,13 @@ body {
 
 .container {
   background: rgba(30, 41, 59, 0.7);
-  backdrop-filter: blur(15px);
   padding: 25px;
   border-radius: 15px;
   width: 350px;
   text-align: center;
 }
 
-select, input, button {
+input, button {
   width: 100%;
   margin-top: 12px;
   padding: 12px;
@@ -34,7 +33,7 @@ select, input, button {
   border: none;
 }
 
-input, select {
+input {
   background: #0f172a;
   color: white;
 }
@@ -42,7 +41,6 @@ input, select {
 button {
   background: linear-gradient(90deg, #38bdf8, #6366f1);
   color: white;
-  font-weight: bold;
 }
 
 .loader { display: none; }
@@ -55,8 +53,7 @@ button {
   <h1>🔥 Hinglify</h1>
   <p>Convert English subtitles to Hinglish</p>
 
-  <input type="text" id="apiKey" placeholder="Paste Gemini API Key">
-
+  <input type="text" id="apiKey" placeholder="Enter Gemini API Key">
   <input type="file" id="fileInput" accept=".srt">
 
   <button onclick="convert()">Convert</button>
