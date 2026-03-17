@@ -13,7 +13,7 @@ ${text}
 `;
 
   const res = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`,
     {
       method: "POST",
       headers: {
@@ -31,7 +31,7 @@ ${text}
 
   const data = await res.json();
 
-  console.log("🔥 GEMINI RESPONSE:", JSON.stringify(data));
+  console.log("🔥 GEMINI:", JSON.stringify(data));
 
   if (!data.candidates) {
     console.error("❌ ERROR:", data);
