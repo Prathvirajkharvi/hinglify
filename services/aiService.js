@@ -14,15 +14,25 @@ export async function convertWithChatGPT(apiKey, text) {
       "Authorization": `Bearer ${apiKey}`
     },
     body: JSON.stringify({
-      model: "gpt-4o-mini",
+      model: "gpt-3.5-turbo", // 🔥 SAFE + WORKING
       messages: [
-        { role: "user", content: getPrompt(text) }
+        {
+          role: "user",
+          content: `Convert to Hinglish: ${text}`
+        }
       ]
     })
   });
 
   const data = await res.json();
-  return data.choices?.[0]?.message?.content || text;
+
+  console.log("API RESPONSE:", data); // 🔥 DEBUG
+
+  if (!data.choices) {
+    throw new Error("AI failed: " + JSON.stringify(data));
+  }
+
+  return data.choices[0].message.content;
 }
 
 // 🔵 Gemini

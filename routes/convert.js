@@ -1,5 +1,3 @@
-// routes/convert.js
-
 import express from "express";
 import multer from "multer";
 import { parseSRT, buildSRT } from "../utils/srtParser.js";
@@ -7,10 +5,8 @@ import { convertText } from "../services/aiService.js";
 
 const router = express.Router();
 
-// 🔥 Memory storage (NO FILE SAVE)
 const upload = multer({ storage: multer.memoryStorage() });
 
-// POST /convert
 router.post("/", upload.single("file"), async (req, res) => {
   try {
     const file = req.file;
@@ -24,34 +20,30 @@ router.post("/", upload.single("file"), async (req, res) => {
       return res.status(400).json({ error: "Missing API key or type" });
     }
 
-    // 🔹 Convert buffer to text
     const srtText = file.buffer.toString("utf-8");
-
-    // 🔹 Parse SRT
     const entries = parseSRT(srtText);
 
-    // 🔥 Convert each subtitle line
+    // 🔥 Convert subtitles
     for (let entry of entries) {
-  try {
-    entry.text = await convertText(apiType, apiKey, entry.text);
-  } catch (err) {
-    console.error("Convert error:", err.message);
-    entry.text = entry.text; // fallback
-  }
-}
+      try {
+        entry.text = await convertText(apiType, apiKey, entry.text);
+      } catch (err) {
+        console.error("Convert error:", err.message);
+      }
+    }
 
-    // 🔹 Rebuild SRT
-    const outputSRT = buildSRT(entries);
+    // 🔥 IMPORTANT: rebuild SRT
+    const newSRT = buildSRT(entries);
 
-    // 🔹 Send as download
-    res.setHeader("Content-Disposition", "attachment; filename=hinglish_subtitles.srt");
+    // 🔥 IMPORTANT: send file
+    res.setHeader("Content-Disposition", "attachment; filename=hinglish.srt");
     res.setHeader("Content-Type", "text/plain");
 
-    return res.send(outputSRT);
+    res.send(newSRT);
 
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: "Conversion failed" });
+  } catch (err) {
+    console.error("Server error:", err);
+    res.status(500).json({ error: "Conversion failed" });
   }
 });
 
