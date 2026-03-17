@@ -1,9 +1,9 @@
 async function convert() {
-  const apiKey = document.getElementById("apiKey").value;
-  const fileInput = document.getElementById("fileInput").files[0];
+  const apiKey = document.getElementById("apiKey").value.trim();
+  const file = document.getElementById("fileInput").files[0];
   const loader = document.getElementById("loader");
 
-  if (!apiKey || !fileInput) {
+  if (!apiKey || !file) {
     alert("API key aur file dalo!");
     return;
   }
@@ -11,9 +11,8 @@ async function convert() {
   loader.style.display = "block";
 
   const formData = new FormData();
-  formData.append("file", fileInput);
+  formData.append("file", file);
   formData.append("apiKey", apiKey);
-  formData.append("apiType", "gemini"); // 🔥 FORCE FIX
 
   const res = await fetch("/convert", {
     method: "POST",
@@ -24,8 +23,9 @@ async function convert() {
 
   loader.style.display = "none";
 
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = "hinglish_subtitles.srt";
-  link.click();
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "hinglish.srt";
+  a.click();
 }

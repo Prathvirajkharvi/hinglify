@@ -11,12 +11,15 @@ router.post("/", upload.single("file"), async (req, res) => {
     const file = req.file;
     const { apiKey } = req.body;
 
+    if (!file || !apiKey) {
+      return res.status(400).send("Missing data");
+    }
+
     const srtText = file.buffer.toString("utf-8");
     const entries = parseSRT(srtText);
 
     for (let entry of entries) {
-      const result = await convertText("gemini", apiKey, entry.text);
-      entry.text = result;
+      entry.text = await convertText(apiKey, entry.text);
     }
 
     const newSRT = buildSRT(entries);
