@@ -10,7 +10,7 @@ import convertRoute from "./routes/convert.js";
 const app = express();
 const PORT = process.env.PORT || 10000;
 
-// __dirname fix
+// dirname fix
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -18,7 +18,6 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// frontend serve
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/convert", convertRoute);

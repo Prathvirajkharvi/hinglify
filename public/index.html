@@ -27,15 +27,8 @@ body {
   text-align: center;
 }
 
-h1 {
-  color: #38bdf8;
-  margin-bottom: 5px;
-}
-
-p {
-  font-size: 14px;
-  opacity: 0.7;
-}
+h1 { color: #38bdf8; }
+p { font-size: 14px; opacity: 0.7; }
 
 select, input, button {
   width: 100%;
@@ -43,7 +36,6 @@ select, input, button {
   padding: 12px;
   border-radius: 8px;
   border: none;
-  outline: none;
 }
 
 input, select {
@@ -56,20 +48,10 @@ button {
   color: white;
   font-weight: bold;
   cursor: pointer;
-  transition: 0.3s;
 }
 
-button:hover {
-  transform: scale(1.05);
-}
-
-/* 🔥 Loader */
-.loader {
-  display: none;
-  margin-top: 10px;
-}
+.loader { display: none; margin-top: 10px; }
 </style>
-
 </head>
 
 <body>
@@ -78,13 +60,12 @@ button:hover {
   <h1>🔥 Hinglify</h1>
   <p>Convert English subtitles to Hinglish</p>
 
+  <!-- ✅ FIXED -->
   <select id="apiType">
-    <option value="chatgpt">ChatGPT</option>
     <option value="gemini">Gemini</option>
   </select>
 
   <input type="text" id="apiKey" placeholder="Enter API Key">
-
   <input type="file" id="fileInput" accept=".srt">
 
   <button onclick="convert()">Convert</button>
@@ -93,6 +74,5 @@ button:hover {
 </div>
 
 <script src="script.js"></script>
-
 </body>
 </html>

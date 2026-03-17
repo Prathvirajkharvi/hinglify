@@ -1,6 +1,5 @@
 async function convert() {
   const apiKey = document.getElementById("apiKey").value;
-  const apiType = document.getElementById("apiType").value;
   const fileInput = document.getElementById("fileInput").files[0];
   const loader = document.getElementById("loader");
 
@@ -14,7 +13,7 @@ async function convert() {
   const formData = new FormData();
   formData.append("file", fileInput);
   formData.append("apiKey", apiKey);
-  formData.append("apiType", apiType);
+  formData.append("apiType", "gemini"); // 🔥 FORCE FIX
 
   const res = await fetch("/convert", {
     method: "POST",
