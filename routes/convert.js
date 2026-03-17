@@ -1,3 +1,5 @@
+// routes/convert.js
+
 import express from "express";
 import multer from "multer";
 import { parseSRT, buildSRT } from "../utils/srtParser.js";
@@ -23,7 +25,7 @@ router.post("/", upload.single("file"), async (req, res) => {
     const srtText = file.buffer.toString("utf-8");
     const entries = parseSRT(srtText);
 
-    // 🔥 Convert subtitles
+    // 🔥 Convert each line
     for (let entry of entries) {
       try {
         entry.text = await convertText(apiType, apiKey, entry.text);
@@ -32,10 +34,10 @@ router.post("/", upload.single("file"), async (req, res) => {
       }
     }
 
-    // 🔥 IMPORTANT: rebuild SRT
+    // 🔥 Rebuild SRT
     const newSRT = buildSRT(entries);
 
-    // 🔥 IMPORTANT: send file
+    // 🔥 Send file
     res.setHeader("Content-Disposition", "attachment; filename=hinglish.srt");
     res.setHeader("Content-Type", "text/plain");
 

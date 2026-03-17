@@ -1,11 +1,10 @@
 // services/aiService.js
 
-// 🔥 Prompt generator
 function getPrompt(text) {
-  return `Convert the following English subtitle into natural Hinglish (Hindi + English mix, casual tone). Keep it short and human-like:\n\n"${text}"`;
+  return `Convert this English subtitle into natural Hinglish (Hindi + English mix, casual tone):\n${text}`;
 }
 
-// 🟢 ChatGPT
+// 🔥 ChatGPT
 export async function convertWithChatGPT(apiKey, text) {
   const res = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
@@ -14,11 +13,11 @@ export async function convertWithChatGPT(apiKey, text) {
       "Authorization": `Bearer ${apiKey}`
     },
     body: JSON.stringify({
-      model: "gpt-3.5-turbo", // 🔥 SAFE + WORKING
+      model: "gpt-3.5-turbo",
       messages: [
         {
           role: "user",
-          content: `Convert to Hinglish: ${text}`
+          content: getPrompt(text)
         }
       ]
     })
@@ -26,10 +25,10 @@ export async function convertWithChatGPT(apiKey, text) {
 
   const data = await res.json();
 
-  console.log("API RESPONSE:", data); // 🔥 DEBUG
+  console.log("CHATGPT RESPONSE:", data);
 
   if (!data.choices) {
-    throw new Error("AI failed: " + JSON.stringify(data));
+    throw new Error("ChatGPT API failed: " + JSON.stringify(data));
   }
 
   return data.choices[0].message.content;
@@ -55,10 +54,17 @@ export async function convertWithGemini(apiKey, text) {
   );
 
   const data = await res.json();
-  return data.candidates?.[0]?.content?.parts?.[0]?.text || text;
+
+  console.log("GEMINI RESPONSE:", data);
+
+  if (!data.candidates) {
+    throw new Error("Gemini API failed: " + JSON.stringify(data));
+  }
+
+  return data.candidates[0].content.parts[0].text;
 }
 
-// 🎯 Switch
+// 🎯 Main switch
 export async function convertText(apiType, apiKey, text) {
   if (apiType === "chatgpt") {
     return await convertWithChatGPT(apiKey, text);
