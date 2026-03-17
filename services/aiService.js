@@ -3,23 +3,17 @@ export async function convertText(apiKey, text) {
   if (!text || text.length < 2) return text;
 
   const prompt = `
-Convert this English subtitle into natural Hinglish.
-
-Rules:
-- Hindi + English mix
-- Casual tone
-- DO NOT return same sentence
-- Make it human style
+Convert this English sentence into natural Hinglish (Hindi + English mix).
 
 Example:
-"I will protect you" → "Main tumhe protect karunga"
+I will protect you → Main tumhe protect karunga
 
 Text:
 ${text}
 `;
 
   const res = await fetch(
-    `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
     {
       method: "POST",
       headers: {
@@ -37,19 +31,12 @@ ${text}
 
   const data = await res.json();
 
-  console.log("🔥 GEMINI RESPONSE:", JSON.stringify(data));
+  console.log("🔥 GEMINI:", JSON.stringify(data));
 
-  if (!data.candidates || !data.candidates[0]?.content?.parts?.[0]?.text) {
-    console.error("❌ Gemini failed:", data);
-    return text; // fallback
+  if (!data.candidates) {
+    console.error("❌ ERROR:", data);
+    return text;
   }
 
-  let output = data.candidates[0].content.parts[0].text.trim();
-
-  // ❗ same output fix
-  if (output.toLowerCase() === text.toLowerCase()) {
-    output = "👉 " + text;
-  }
-
-  return output;
+  return data.candidates[0].content.parts[0].text;
 }
