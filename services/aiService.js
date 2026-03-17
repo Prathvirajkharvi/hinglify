@@ -31,7 +31,7 @@ ${text}
 
   const data = await res.json();
 
-  console.log("🔥 GEMINI:", JSON.stringify(data));
+  console.log("🔥 GEMINI RESPONSE:", JSON.stringify(data));
 
   if (!data.candidates) {
     console.error("❌ ERROR:", data);
